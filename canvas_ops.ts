@@ -66,3 +66,40 @@ export function new_node_rect(nodes: rect[], from: rect, d: dir, size: { width: 
 	}
 	return spot;
 }
+
+export function move_box(r: box, d: dir, step: number): { x: number; y: number } {
+	return {
+		x: r.x + (d === 'right' ? step : d === 'left' ? -step : 0),
+		y: r.y + (d === 'down' ? step : d === 'up' ? -step : 0),
+	};
+}
+
+export function resize_box(r: box, d: dir, step: number, min: number): { width: number; height: number } {
+	return {
+		width: Math.max(min, d === 'right' ? r.width + step : d === 'left' ? r.width - step : r.width),
+		height: Math.max(min, d === 'down' ? r.height + step : d === 'up' ? r.height - step : r.height),
+	};
+}
+
+export const colors = ['1', '2', '3', '4', '5', '6'];
+
+export function next_color(current: string): string {
+	const at = colors.indexOf(current);
+	if (at === -1) return colors[0];
+	return at === colors.length - 1 ? '' : colors[at + 1];
+}
+
+export function bounding_box(boxes: box[], pad: number): box {
+	const min_x = Math.min(...boxes.map((b) => b.x)) - pad;
+	const min_y = Math.min(...boxes.map((b) => b.y)) - pad;
+	const max_x = Math.max(...boxes.map((b) => b.x + b.width)) + pad;
+	const max_y = Math.max(...boxes.map((b) => b.y + b.height)) + pad;
+	return { x: min_x, y: min_y, width: max_x - min_x, height: max_y - min_y };
+}
+
+export function connect_chain(nodes: rect[]): [string, string][] {
+	const order = reading_order(nodes);
+	const pairs: [string, string][] = [];
+	for (let i = 0; i + 1 < order.length; i++) pairs.push([order[i].id, order[i + 1].id]);
+	return pairs;
+}
