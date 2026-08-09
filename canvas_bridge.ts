@@ -1,4 +1,7 @@
-import { connect_chain, nearest_in_direction, new_node_rect, step_focus, type dir, type rect } from './canvas_ops';
+import { bounding_box, connect_chain, move_box, nearest_in_direction, new_node_rect, next_color, resize_box, step_focus, type dir, type rect } from './canvas_ops';
+
+const group_pad = 20;
+const min_node_size = 50;
 
 export type opts = { move_step: number; new_node_gap: number };
 
@@ -66,4 +69,54 @@ export function connect_selected(canvas: any, two_way: boolean): void {
 	const sel = selected_nodes(canvas);
 	if (sel.length < 2) return;
 	add_edges(canvas, connect_chain(sel.map((n) => ({ id: n.id, x: n.x, y: n.y, width: n.width, height: n.height }))), two_way);
+}
+
+export function move_selection(canvas: any, d: dir, o: opts): void {
+	const sel = selected_nodes(canvas);
+	if (sel.length === 0) return;
+	for (const n of sel) n.moveTo(move_box(n, d, o.move_step));
+	canvas.requestSave();
+}
+
+export function resize_selection(canvas: any, d: dir, o: opts): void {
+	const sel = selected_nodes(canvas);
+	if (sel.length === 0) return;
+	for (const n of sel) n.resize(resize_box(n, d, o.move_step, min_node_size));
+	canvas.requestSave();
+}
+
+export function cycle_color(canvas: any): void {
+	const sel = selected_nodes(canvas);
+	if (sel.length === 0) return;
+	for (const n of sel) n.setColor(next_color(n.color || ''), true);
+	canvas.requestSave();
+}
+
+export function edit_selected(canvas: any): void {
+	const node = selected_nodes(canvas)[0];
+	if (node && node.isEditable()) node.startEditing();
+}
+
+export function delete_selected(canvas: any): void {
+	canvas.deleteSelection();
+}
+
+export function group_selection(canvas: any): void {
+	const sel = selected_nodes(canvas);
+	if (sel.length === 0) return;
+	const b = bounding_box(
+		sel.map((n) => ({ x: n.x, y: n.y, width: n.width, height: n.height })),
+		group_pad,
+	);
+	const group = canvas.createGroupNode({ pos: { x: b.x, y: b.y }, size: { width: b.width, height: b.height }, save: false, focus: false });
+	canvas.requestSave();
+	canvas.selectOnly(group);
+}
+
+export function ungroup_selection(canvas: any): void {
+	const groups = selected_nodes(canvas).filter((n) => n.getData().type === 'group');
+	if (groups.length === 0) return;
+	for (const g of groups) canvas.removeNode(g);
+	canvas.deselectAll();
+	canvas.requestSave();
 }
