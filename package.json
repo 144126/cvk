@@ -1,0 +1,23 @@
+{
+	"name": "cvk",
+	"version": "0.0.1",
+	"description": "keyboard shortcuts for obsidian canvas",
+	"main": "main.js",
+	"scripts": {
+		"build": "node esbuild.config.mjs production && node deploy.mjs",
+		"dev": "node esbuild.config.mjs",
+		"deploy": "node deploy.mjs",
+		"check": "tsc --noEmit",
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"@types/node": "^22.0.0",
+		"esbuild": "^0.25.0",
+		"obsidian": "^1.12.0",
+		"typescript": "^5.7.0",
+		"vitest": "^4.1.10"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": ["esbuild"]
+	}
+}

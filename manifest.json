@@ -1,0 +1,10 @@
+{
+	"id": "cvk",
+	"name": "Canvas Keys",
+	"version": "0.0.1",
+	"minAppVersion": "1.12.0",
+	"description": "drive obsidian canvas from the keyboard: create connected nodes, navigate, move, resize, colour and group",
+	"author": "ed",
+	"authorUrl": "https://ed.apexlinks.org",
+	"isDesktopOnly": false
+}
