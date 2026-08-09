@@ -42,3 +42,27 @@ export function nearest_in_direction(nodes: rect[], from: rect, d: dir): string 
 	}
 	return best;
 }
+
+export function overlaps(a: box, b: box): boolean {
+	return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+}
+
+export function new_node_rect(nodes: rect[], from: rect, d: dir, size: { width: number; height: number }, gap: number): box {
+	const o = center(from);
+	const sx = d === 'right' ? 1 : d === 'left' ? -1 : 0;
+	const sy = d === 'down' ? 1 : d === 'up' ? -1 : 0;
+	const reach = sx !== 0 ? (from.width + size.width) / 2 + gap : (from.height + size.height) / 2 + gap;
+	const stride = (sx !== 0 ? size.width : size.height) + gap;
+	let spot: box = { x: 0, y: 0, width: size.width, height: size.height };
+	for (let i = 0; i < 100; i++) {
+		const away = reach + i * stride;
+		spot = {
+			x: Math.round(o.x + sx * away - size.width / 2),
+			y: Math.round(o.y + sy * away - size.height / 2),
+			width: size.width,
+			height: size.height,
+		};
+		if (!nodes.some((n) => overlaps(spot, n))) break;
+	}
+	return spot;
+}

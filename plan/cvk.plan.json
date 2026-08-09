@@ -14,7 +14,7 @@
 	},
 	"nav_spatial": {
 		"s": "Add directional navigation to canvas_ops.ts.\n\ncanvas_ops.ts currently ends with the step_focus function. Append this function to the end of the file, changing nothing above it:\n\nexport function nearest_in_direction(nodes: rect[], from: rect, d: dir): string | null {\n\tconst o = center(from);\n\tlet best: string | null = null;\n\tlet best_score = Infinity;\n\tfor (const n of nodes) {\n\t\tif (n.id === from.id) continue;\n\t\tconst c = center(n);\n\t\tconst dx = c.x - o.x;\n\t\tconst dy = c.y - o.y;\n\t\tconst along = d === 'right' ? dx : d === 'left' ? -dx : d === 'down' ? dy : -dy;\n\t\tif (along <= 0) continue;\n\t\tconst across = Math.abs(d === 'right' || d === 'left' ? dy : dx);\n\t\tconst score = along + 2 * across;\n\t\tif (score < best_score || (score === best_score && best !== null && n.id < best)) {\n\t\t\tbest = n.id;\n\t\t\tbest_score = score;\n\t\t}\n\t}\n\treturn best;\n}\n\nThis is centre to centre spatial navigation. A candidate only counts if it lies strictly ahead along the requested axis (along > 0). Sideways drift is weighted twice as heavily as forward distance, so a node straight ahead but far away beats a near node that is way off to the side, which is what feels right when driving a canvas with the arrow keys. Exact ties fall to the smaller id so the choice is deterministic.\n\nThen place its test, byte for byte:\n\n  cp plan/tests/tests/nav_spatial.test.ts.txt tests/nav_spatial.test.ts",
-		"d": 0,
+		"d": 1,
 		"v": "grep -qF 'export function step_focus' canvas_ops.ts",
 		"t": "bash plan/verify_tests.sh && pnpm test && pnpm check && grep -qF 'export function nearest_in_direction' canvas_ops.ts && test -f tests/nav_spatial.test.ts"
 	},
