@@ -21,3 +21,24 @@ export function step_focus(nodes: rect[], current_id: string | null, delta: numb
 	if (at === -1) return (delta >= 0 ? order[0] : order[order.length - 1]).id;
 	return order[(at + delta + order.length) % order.length].id;
 }
+
+export function nearest_in_direction(nodes: rect[], from: rect, d: dir): string | null {
+	const o = center(from);
+	let best: string | null = null;
+	let best_score = Infinity;
+	for (const n of nodes) {
+		if (n.id === from.id) continue;
+		const c = center(n);
+		const dx = c.x - o.x;
+		const dy = c.y - o.y;
+		const along = d === 'right' ? dx : d === 'left' ? -dx : d === 'down' ? dy : -dy;
+		if (along <= 0) continue;
+		const across = Math.abs(d === 'right' || d === 'left' ? dy : dx);
+		const score = along + 2 * across;
+		if (score < best_score || (score === best_score && best !== null && n.id < best)) {
+			best = n.id;
+			best_score = score;
+		}
+	}
+	return best;
+}
