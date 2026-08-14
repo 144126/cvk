@@ -6,8 +6,8 @@ drive obsidian canvas from the keyboard.
 
 | keys | does |
 | --- | --- |
-| `Alt` + arrow | new connected node that way, arrow pointing at it |
-| `Alt+Shift` + arrow | same, but the link points both ways |
+| `Alt` + arrow | new node that way, connected to nothing |
+| `Alt+Shift` + arrow | new connected node that way, arrow pointing at it |
 | `Alt+N` | new node in the middle of the view, connected to nothing |
 | `Alt+H` `Alt+J` `Alt+K` `Alt+L` | focus the nearest node left / down / up / right |
 | `Tab` / `Shift+Tab` | focus next / previous node, top-to-bottom then left-to-right |
@@ -18,6 +18,7 @@ drive obsidian canvas from the keyboard.
 | `Alt+G` / `Alt+Shift+G` | group the selection / remove the selected group |
 | unbound | move node up/down/left/right by the configured step — obsidian's own arrows already nudge |
 | unbound | resize node up/down/left/right — bind them in settings then hotkeys |
+| unbound | new connected node that way, link points both ways |
 
 every one of these is rebindable in settings then hotkeys, and none of them fire while a card is being edited.
 

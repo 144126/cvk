@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { add_edges, connect_selected, create_connected, create_free } from '../canvas_bridge';
+import { add_edges, connect_selected, create_dir, create_free } from '../canvas_bridge';
 import { make_canvas, make_node, selected_ids } from './fake_canvas';
 
 const opts = { move_step: 50, new_node_gap: 50 };
@@ -38,29 +38,29 @@ describe('add_edges', () => {
 	});
 });
 
-describe('create_connected', () => {
+describe('create_dir', () => {
 	it('creates a default-sized node one gap away', () => {
 		canvas.selectOnly(a);
-		create_connected(canvas, 'right', false, opts);
+		create_dir(canvas, 'right', 'one', opts);
 		const made = canvas.nodes.get('new0');
 		expect(made).toMatchObject({ x: 150, y: -5, width: 250, height: 60 });
 	});
 
 	it('links the old node to the new one, arrow pointing at the new one', () => {
 		canvas.selectOnly(a);
-		create_connected(canvas, 'right', false, opts);
+		create_dir(canvas, 'right', 'one', opts);
 		expect(edges(canvas)).toEqual([{ id: expect.stringMatching(/^[0-9a-f]{16}$/), fromNode: 'a', toNode: 'new0', fromEnd: 'none', toEnd: 'arrow' }]);
 	});
 
 	it('makes the link two-way on request', () => {
 		canvas.selectOnly(a);
-		create_connected(canvas, 'right', true, opts);
+		create_dir(canvas, 'right', 'two', opts);
 		expect(edges(canvas)[0].fromEnd).toBe('arrow');
 	});
 
 	it('selects the new node, starts editing it and pans to it', () => {
 		canvas.selectOnly(a);
-		create_connected(canvas, 'down', false, opts);
+		create_dir(canvas, 'down', 'one', opts);
 		expect(selected_ids(canvas)).toEqual(['new0']);
 		expect(canvas.nodes.get('new0').editing).toBe(true);
 		expect(canvas.panned).toEqual([{ minX: -75, minY: 100, maxX: 175, maxY: 160 }]);
@@ -68,12 +68,12 @@ describe('create_connected', () => {
 
 	it('saves the canvas', () => {
 		canvas.selectOnly(a);
-		create_connected(canvas, 'left', false, opts);
+		create_dir(canvas, 'left', 'one', opts);
 		expect(canvas.saves).toBeGreaterThan(0);
 	});
 
 	it('does nothing when no node is selected', () => {
-		create_connected(canvas, 'right', false, opts);
+		create_dir(canvas, 'right', 'one', opts);
 		expect(canvas.nodes.size).toBe(1);
 		expect(canvas.edges.size).toBe(0);
 		expect(canvas.saves).toBe(0);
@@ -83,8 +83,23 @@ describe('create_connected', () => {
 		const blocker = make_node('b', 150, -5, 250, 60);
 		const busy = make_canvas([a, blocker]);
 		busy.selectOnly(a);
-		create_connected(busy, 'right', false, opts);
+		create_dir(busy, 'right', 'one', opts);
 		expect(busy.nodes.get('new0').x).toBe(450);
+	});
+
+	it('creates the node in the right spot but connects it to nothing', () => {
+		canvas.selectOnly(a);
+		create_dir(canvas, 'right', 'none', opts);
+		const made = canvas.nodes.get('new0');
+		expect(made).toMatchObject({ x: 150, y: -5, width: 250, height: 60 });
+		expect(canvas.edges.size).toBe(0);
+		expect(canvas.imported).toEqual([]);
+	});
+
+	it('saves the canvas when connected to nothing', () => {
+		canvas.selectOnly(a);
+		create_dir(canvas, 'right', 'none', opts);
+		expect(canvas.saves).toBe(1);
 	});
 });
 

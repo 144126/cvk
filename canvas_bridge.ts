@@ -53,7 +53,7 @@ export function add_edges(canvas: any, pairs: [string, string][], two_way: boole
 	canvas.requestSave();
 }
 
-export function create_connected(canvas: any, d: dir, two_way: boolean, o: opts): void {
+export function create_dir(canvas: any, d: dir, link: 'none' | 'one' | 'two', o: opts): void {
 	const current = selected_nodes(canvas)[0];
 	if (!current) return;
 	const rects = all_rects(canvas);
@@ -61,7 +61,8 @@ export function create_connected(canvas: any, d: dir, two_way: boolean, o: opts)
 	if (!from) return;
 	const spot = new_node_rect(rects, from, d, canvas.config.defaultTextNodeDimensions, o.new_node_gap);
 	const made = canvas.createTextNode({ pos: { x: spot.x, y: spot.y }, size: { width: spot.width, height: spot.height }, save: false });
-	add_edges(canvas, [[current.id, made.id]], two_way);
+	if (link === 'none') canvas.requestSave();
+	else add_edges(canvas, [[current.id, made.id]], link === 'two');
 	canvas.panIntoView(made.getBBox());
 }
 

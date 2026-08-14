@@ -19,8 +19,9 @@ export default class CvkPlugin extends Plugin {
 		this.addSettingTab(new CvkSettingsTab(this.app, this, this.settings, () => this.saveData(this.settings)));
 
 		for (const d of dirs) {
-			this.canvas_command(`new-node-${d}`, `new connected node ${d}`, [{ modifiers: ['Alt'], key: arrow[d] }], false, (c) => ops.create_connected(c, d, false, this.settings));
-			this.canvas_command(`new-node-two-way-${d}`, `new connected node ${d} (two-way)`, [{ modifiers: ['Alt', 'Shift'], key: arrow[d] }], false, (c) => ops.create_connected(c, d, true, this.settings));
+			this.canvas_command(`new-node-${d}`, `new node ${d}`, [{ modifiers: ['Alt'], key: arrow[d] }], false, (c) => ops.create_dir(c, d, 'none', this.settings));
+			this.canvas_command(`new-node-connected-${d}`, `new connected node ${d}`, [{ modifiers: ['Alt', 'Shift'], key: arrow[d] }], false, (c) => ops.create_dir(c, d, 'one', this.settings));
+			this.canvas_command(`new-node-two-way-${d}`, `new connected node ${d} (two-way)`, [], false, (c) => ops.create_dir(c, d, 'two', this.settings));
 			this.canvas_command(`focus-${d}`, `focus nearest node ${d}`, [{ modifiers: ['Alt'], key: letter[d] }], true, (c) => ops.focus_dir(c, d));
 			this.canvas_command(`move-${d}`, `move node ${d}`, [], true, (c) => ops.move_selection(c, d, this.settings));
 			this.canvas_command(`resize-${d}`, `resize node ${d}`, [], true, (c) => ops.resize_selection(c, d, this.settings));
