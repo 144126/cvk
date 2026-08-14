@@ -31,7 +31,7 @@ export default class CvkPlugin extends Plugin {
 		this.canvas_command('focus-next', 'focus next node', [{ modifiers: [], key: 'Tab' }], true, (c) => ops.focus_step(c, 1));
 		this.canvas_command('focus-prev', 'focus previous node', [{ modifiers: ['Shift'], key: 'Tab' }], true, (c) => ops.focus_step(c, -1));
 		this.canvas_command('edit-node', 'edit node', [{ modifiers: [], key: 'Enter' }], false, (c) => ops.edit_selected(c));
-		this.canvas_command('delete-node', 'delete node', [{ modifiers: ['Shift'], key: 'Delete' }, { modifiers: ['Mod'], key: 'Backspace' }], false, (c) => ops.delete_selected(c));
+		this.canvas_command('delete-node', 'delete node', [{ modifiers: ['Shift'], key: 'Delete' }, { modifiers: ['Shift'], key: 'D' }, { modifiers: ['Mod'], key: 'Backspace' }], false, (c) => ops.delete_selected(c));
 		this.canvas_command('connect-selected', 'connect selected nodes', [{ modifiers: ['Alt'], key: 'C' }], false, (c) => ops.connect_selected(c, false));
 		this.canvas_command('connect-selected-two-way', 'connect selected nodes (two-way)', [{ modifiers: ['Alt', 'Shift'], key: 'C' }], false, (c) => ops.connect_selected(c, true));
 		this.canvas_command('cycle-color', 'cycle node colour', [{ modifiers: ['Alt'], key: 'P' }], false, (c) => ops.cycle_color(c));
