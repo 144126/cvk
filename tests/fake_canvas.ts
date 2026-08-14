@@ -35,6 +35,8 @@ export function make_canvas(nodes: any[] = []): any {
 		deleted: false,
 		made: 0,
 	};
+	c.center = { x: 0, y: 0 };
+	c.posCenter = () => c.center;
 	c.selectOnly = (n: any) => {
 		c.selection.clear();
 		c.selection.add(n);

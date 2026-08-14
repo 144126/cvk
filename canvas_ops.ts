@@ -67,6 +67,20 @@ export function new_node_rect(nodes: rect[], from: rect, d: dir, size: { width: 
 	return spot;
 }
 
+export function free_rect(nodes: rect[], at: { x: number; y: number }, size: { width: number; height: number }, gap: number): box {
+	let spot: box = { x: 0, y: 0, width: size.width, height: size.height };
+	for (let i = 0; i < 100; i++) {
+		spot = {
+			x: Math.round(at.x - size.width / 2),
+			y: Math.round(at.y - size.height / 2 + i * (size.height + gap)),
+			width: size.width,
+			height: size.height,
+		};
+		if (!nodes.some((n) => overlaps(spot, n))) break;
+	}
+	return spot;
+}
+
 export function move_box(r: box, d: dir, step: number): { x: number; y: number } {
 	return {
 		x: r.x + (d === 'right' ? step : d === 'left' ? -step : 0),

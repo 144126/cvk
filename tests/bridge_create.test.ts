@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { add_edges, connect_selected, create_connected } from '../canvas_bridge';
+import { add_edges, connect_selected, create_connected, create_free } from '../canvas_bridge';
 import { make_canvas, make_node, selected_ids } from './fake_canvas';
 
 const opts = { move_step: 50, new_node_gap: 50 };
@@ -118,5 +118,37 @@ describe('connect_selected', () => {
 		connect_selected(canvas, false);
 		expect(canvas.edges.size).toBe(0);
 		expect(canvas.saves).toBe(0);
+	});
+});
+
+describe('create_free', () => {
+	it('creates a default-sized node on the viewport centre', () => {
+		canvas.center = { x: 500, y: 400 };
+		create_free(canvas, opts);
+		expect(canvas.nodes.get('new0')).toMatchObject({ x: 375, y: 370, width: 250, height: 60 });
+	});
+
+	it('connects the new node to nothing', () => {
+		canvas.selectOnly(a);
+		create_free(canvas, opts);
+		expect(canvas.imported).toEqual([]);
+		expect(canvas.edges.size).toBe(0);
+	});
+
+	it('drops the node below an occupied centre', () => {
+		const busy = make_canvas([make_node('b', -125, -30, 250, 60)]);
+		create_free(busy, opts);
+		expect(busy.nodes.get('new0').y).toBe(80);
+	});
+
+	it('works with nothing selected, selects the new node and starts editing it', () => {
+		create_free(canvas, opts);
+		expect(selected_ids(canvas)).toEqual(['new0']);
+		expect(canvas.nodes.get('new0').editing).toBe(true);
+	});
+
+	it('saves the canvas', () => {
+		create_free(canvas, opts);
+		expect(canvas.saves).toBe(1);
 	});
 });

@@ -8,19 +8,20 @@ drive obsidian canvas from the keyboard.
 | --- | --- |
 | `Alt` + arrow | new connected node that way, arrow pointing at it |
 | `Alt+Shift` + arrow | same, but the link points both ways |
-| `Mod` + arrow | focus the nearest node that way |
-| `Mod+Alt` + arrow | move the selection by the configured step |
+| `Alt+N` | new node in the middle of the view, connected to nothing |
+| `Alt+H` `Alt+J` `Alt+K` `Alt+L` | focus the nearest node left / down / up / right |
 | `Tab` / `Shift+Tab` | focus next / previous node, top-to-bottom then left-to-right |
 | `Enter` | edit the selected node |
 | `Mod+Backspace` | delete the selection |
 | `Alt+C` / `Alt+Shift+C` | connect the selected nodes into a chain, one-way / two-way |
 | `Alt+P` | cycle the selection through the six canvas colours and back to none |
 | `Alt+G` / `Alt+Shift+G` | group the selection / remove the selected group |
+| unbound | move node up/down/left/right by the configured step — obsidian's own arrows already nudge |
 | unbound | resize node up/down/left/right — bind them in settings then hotkeys |
 
 every one of these is rebindable in settings then hotkeys, and none of them fire while a card is being edited.
 
-`Mod+Alt` + arrow is the one to watch on linux: some window managers grab it for workspace switching. rebind if so.
+no default binding uses `Ctrl` with an arrow key.
 
 ## already in obsidian, not reimplemented here
 

@@ -4,6 +4,7 @@ import { dirs, type dir } from './canvas_ops';
 import { CvkSettingsTab, DEFAULT_SETTINGS, type CvkSettings } from './settings';
 
 const arrow: Record<dir, string> = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight' };
+const letter: Record<dir, string> = { up: 'K', down: 'J', left: 'H', right: 'L' };
 
 function is_typing(): boolean {
 	const el = activeDocument.activeElement as HTMLElement | null;
@@ -20,11 +21,12 @@ export default class CvkPlugin extends Plugin {
 		for (const d of dirs) {
 			this.canvas_command(`new-node-${d}`, `new connected node ${d}`, [{ modifiers: ['Alt'], key: arrow[d] }], false, (c) => ops.create_connected(c, d, false, this.settings));
 			this.canvas_command(`new-node-two-way-${d}`, `new connected node ${d} (two-way)`, [{ modifiers: ['Alt', 'Shift'], key: arrow[d] }], false, (c) => ops.create_connected(c, d, true, this.settings));
-			this.canvas_command(`focus-${d}`, `focus nearest node ${d}`, [{ modifiers: ['Mod'], key: arrow[d] }], true, (c) => ops.focus_dir(c, d));
-			this.canvas_command(`move-${d}`, `move node ${d}`, [{ modifiers: ['Mod', 'Alt'], key: arrow[d] }], true, (c) => ops.move_selection(c, d, this.settings));
+			this.canvas_command(`focus-${d}`, `focus nearest node ${d}`, [{ modifiers: ['Alt'], key: letter[d] }], true, (c) => ops.focus_dir(c, d));
+			this.canvas_command(`move-${d}`, `move node ${d}`, [], true, (c) => ops.move_selection(c, d, this.settings));
 			this.canvas_command(`resize-${d}`, `resize node ${d}`, [], true, (c) => ops.resize_selection(c, d, this.settings));
 		}
 
+		this.canvas_command('new-node', 'new node', [{ modifiers: ['Alt'], key: 'N' }], false, (c) => ops.create_free(c, this.settings));
 		this.canvas_command('focus-next', 'focus next node', [{ modifiers: [], key: 'Tab' }], true, (c) => ops.focus_step(c, 1));
 		this.canvas_command('focus-prev', 'focus previous node', [{ modifiers: ['Shift'], key: 'Tab' }], true, (c) => ops.focus_step(c, -1));
 		this.canvas_command('edit-node', 'edit node', [{ modifiers: [], key: 'Enter' }], false, (c) => ops.edit_selected(c));

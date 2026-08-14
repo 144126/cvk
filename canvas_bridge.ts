@@ -1,4 +1,4 @@
-import { bounding_box, connect_chain, move_box, nearest_in_direction, new_node_rect, next_color, resize_box, step_focus, type dir, type rect } from './canvas_ops';
+import { bounding_box, connect_chain, free_rect, move_box, nearest_in_direction, new_node_rect, next_color, resize_box, step_focus, type dir, type rect } from './canvas_ops';
 
 const group_pad = 20;
 const min_node_size = 50;
@@ -63,6 +63,13 @@ export function create_connected(canvas: any, d: dir, two_way: boolean, o: opts)
 	const made = canvas.createTextNode({ pos: { x: spot.x, y: spot.y }, size: { width: spot.width, height: spot.height }, save: false });
 	add_edges(canvas, [[current.id, made.id]], two_way);
 	canvas.panIntoView(made.getBBox());
+}
+
+export function create_free(canvas: any, o: opts): void {
+	const size = canvas.config.defaultTextNodeDimensions;
+	const spot = free_rect(all_rects(canvas), canvas.posCenter(), size, o.new_node_gap);
+	canvas.createTextNode({ pos: { x: spot.x, y: spot.y }, size: { width: spot.width, height: spot.height }, save: false });
+	canvas.requestSave();
 }
 
 export function connect_selected(canvas: any, two_way: boolean): void {
