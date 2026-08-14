@@ -12,7 +12,7 @@ drive obsidian canvas from the keyboard.
 | `Alt+H` `Alt+J` `Alt+K` `Alt+L` | focus the nearest node left / down / up / right |
 | `Tab` / `Shift+Tab` | focus next / previous node, top-to-bottom then left-to-right |
 | `Enter` | edit the selected node |
-| `Mod+Backspace` | delete the selection |
+| `Shift+Delete` / `Mod+Backspace` | delete the selection |
 | `Alt+C` / `Alt+Shift+C` | connect the selected nodes into a chain, one-way / two-way |
 | `Alt+P` | cycle the selection through the six canvas colours and back to none |
 | `Alt+G` / `Alt+Shift+G` | group the selection / remove the selected group |
